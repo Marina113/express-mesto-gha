@@ -32,7 +32,7 @@ const createCard = (req, res) => {
   const ownerId = req.user._id;
   Card.create({ name, link, owner: ownerId })
     .then((cards) => res.send({ data: cards }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
 };
 
 // eslint-disable-next-line no-unused-vars
