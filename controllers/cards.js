@@ -18,12 +18,10 @@ const delCardById = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({
-        // eslint-disable-next-line no-shadow
-          message: `${Object.values(err.errors).map((err) => err.message).join(', ')}`,
-        });
+        res.status(400).send({ message: 'Некорректный id' });
+        return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      res.status(500).send({ message: 'Произошла ошибка сервера' });
     });
 };
 
@@ -40,15 +38,19 @@ const putLikes = (req, res) => {
   const ownerId = req.user._id;
   const cardId = req.params._id;
   Card.findByIdAndUpdate(cardId, { $addToSet: { likes: ownerId } }, { new: true })
-    .then((cards) => res.send({ data: cards }))
+    .then((cards) => {
+      if (!cards) {
+        res.status(404).send({ message: 'Карточка не найдена' });
+        return;
+      }
+      res.send({ data: cards });
+    })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({
-        // eslint-disable-next-line no-shadow
-          message: 'Произошла ошибка',
-        });
+        res.status(400).send({ message: 'Некорректный id' });
+        return;
       }
-      // res.status(500).send({ message: 'Произошла ошибка' });
+      res.status(500).send({ message: 'Произошла ошибка сервера' });
     });
 };
 
@@ -59,12 +61,10 @@ const delLikes = (req, res) => {
     .then((cards) => res.send({ data: cards }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({
-        // eslint-disable-next-line no-shadow
-          message: 'Произошла ошибка',
-        });
+        res.status(400).send({ message: 'Некорректный id' });
+        return;
       }
-      // res.status(500).send({ message: 'Произошла ошибка' });
+      res.status(500).send({ message: 'Произошла ошибка сервера' });
     });
 };
 
