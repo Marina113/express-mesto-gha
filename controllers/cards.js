@@ -58,7 +58,13 @@ const delLikes = (req, res) => {
   const ownerId = req.user._id;
   const cardId = req.params._id;
   Card.findByIdAndUpdate(cardId, { $pull: { likes: ownerId } }, { new: true })
-    .then((cards) => res.send({ data: cards }))
+    .then((cards) => {
+      if (!cards) {
+        res.status(404).send({ message: 'Карточка не найдена' });
+        return;
+      }
+      res.send({ data: cards });
+    })
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: 'Некорректный id' });

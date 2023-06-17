@@ -40,7 +40,14 @@ const updateProfile = (req, res) => {
   const owner = req.user._id;
 
   User.findByIdAndUpdate(owner, { name, about }, { new: true, runValidators: true })
-    .then((user) => res.status(200).send({ data: user }))
+    // .then((user) => res.status(200).send({ data: user }))
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ message: 'Пользователь не найден' });
+        return;
+      }
+      res.status(200).send({ data: user });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({
@@ -56,7 +63,14 @@ const updateAvatar = (req, res) => {
   const { avatar } = req.body;
   const owner = req.user._id;
   User.findByIdAndUpdate(owner, { avatar }, { new: true })
-    .then((user) => res.status(200).send({ data: user }))
+    // .then((user) => res.status(200).send({ data: user }))
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ message: 'Пользователь не найден' });
+        return;
+      }
+      res.status(200).send({ data: user });
+    })
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
