@@ -50,10 +50,7 @@ const updateProfile = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({
-          // eslint-disable-next-line no-shadow
-          message: `${Object.values(err.errors).map((err) => err.message).join(', ')}`,
-        });
+        return res.status(400).send({ message: 'Переданы некорректные данные' });
       }
       return res.status(500).send({ message: 'Произошла ошибка' });
     });
@@ -71,7 +68,12 @@ const updateAvatar = (req, res) => {
       }
       res.status(200).send({ data: user });
     })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Произошла ошибка' });
+    });
 };
 
 module.exports = {
