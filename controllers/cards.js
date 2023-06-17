@@ -61,10 +61,10 @@ const delLikes = (req, res) => {
       if (err.name === 'CastError') {
         res.status(400).send({
         // eslint-disable-next-line no-shadow
-          message: `${Object.values(err.errors).map((err) => err.message).join(', ')}`,
+          message: 'Произошла ошибка',
         });
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      // res.status(500).send({ message: 'Произошла ошибка' });
     });
 };
 
