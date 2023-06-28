@@ -1,11 +1,9 @@
-const ERROR_CODE = 400;
-const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
 const OK_CODE = 200;
+const CREATED = 201;
 
 module.exports = {
-  ERROR_CODE,
-  NOT_FOUND,
   INTERNAL_SERVER_ERROR,
   OK_CODE,
+  CREATED,
 };

@@ -1,11 +1,24 @@
 const userRouter = require('express').Router();
-// eslint-disable-next-line object-curly-newline
-const { getUsers, getUserById, createUser, updateProfile, updateAvatar } = require('../controllers/users');
 
+const {
+  getUserByIdValidation,
+  updateProfileValidation,
+  updateAvatarValidation,
+} = require('../middlewares/validation');
+// eslint-disable-next-line object-curly-newline
+const {
+  getUsers,
+  getUserById,
+  updateProfile,
+  updateAvatar,
+  getUserInfo,
+} = require('../controllers/users');
+
+userRouter.get('/users/me', getUserInfo);
 userRouter.get('/users', getUsers);
-userRouter.get('/users/:_id', getUserById);
-userRouter.post('/users', createUser);
-userRouter.patch('/users/me', updateProfile);
-userRouter.patch('/users/me/avatar', updateAvatar);
+userRouter.get('/users/:_id', getUserByIdValidation, getUserById);
+// userRouter.post('/users', createUser);
+userRouter.patch('/users/me', updateProfileValidation, updateProfile);
+userRouter.patch('/users/me/avatar', updateAvatarValidation, updateAvatar);
 
 module.exports = userRouter;
