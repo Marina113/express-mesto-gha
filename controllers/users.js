@@ -5,6 +5,7 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/notFoundError');
 const ValidationError = require('../errors/validationError');
 const ConflictError = require('../errors/conflictError');
+const CastError = require('../errors/castError');
 
 const {
   CREATED,
@@ -24,10 +25,14 @@ const getUserById = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
       }
-      res.status(OK_CODE).send({ data: user });
+      return res.status(OK_CODE).send({ data: user });
     })
-    // .catch(() => res.status(ERROR_CODE).send({ message: 'Некорректные данные' }));
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new CastError('Некорректный id'));
+      }
+      return next(err);
+    });
 };
 
 const getUserInfo = (req, res, next) => {
@@ -50,7 +55,11 @@ const createUser = (req, res, next) => {
     .then((hash) => User.create({
       email, password: hash, name, about, avatar, // записываем хеш в базу
     }))
-    .then((user) => res.status(CREATED).send({ data: user }))
+    .then((user) => {
+      const newUser = user.toObject();
+      delete newUser.password;
+      res.status(CREATED).send({ data: newUser });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError('Некорректные данные'));
@@ -59,7 +68,6 @@ const createUser = (req, res, next) => {
       } else {
         next(err);
       }
-      // return res.status(INTERNAL_SERVER_ERROR).send({ message: 'Произошла ошибка сервера' });
     });
 };
 

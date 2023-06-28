@@ -13,7 +13,7 @@ const createUserValidation = celebrate({
 
 const getUserByIdValidation = celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().required().hex(),
+    userId: Joi.string().required().length(24).hex(),
   }),
 });
 
@@ -37,10 +37,25 @@ const updateAvatarValidation = celebrate({
   }),
 });
 
+const createCardValidation = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30),
+    link: Joi.string().required().pattern(regulExp),
+  }),
+});
+
+const delCardByIdValidation = celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().required().length(24).hex(),
+  }),
+});
+
 module.exports = {
   createUserValidation,
   getUserByIdValidation,
   loginValidation,
   updateProfileValidation,
   updateAvatarValidation,
+  createCardValidation,
+  delCardByIdValidation,
 };

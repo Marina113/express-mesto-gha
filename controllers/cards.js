@@ -39,7 +39,7 @@ const createCard = (req, res, next) => {
   const { name, link } = req.body;
   const ownerId = req.user._id;
   Card.create({ name, link, owner: ownerId })
-    .then((cards) => res.send({ data: cards }))
+    .then((cards) => res.status(OK_CODE).send({ data: cards }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError('Некорректные данные'));
