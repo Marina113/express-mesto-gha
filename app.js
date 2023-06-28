@@ -6,7 +6,7 @@ const routes = require('./routes/index');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const { loginValidation, createUserValidation } = require('./middlewares/validation');
-const NotFoundError = require('./errors/notFoundError');
+// const NotFoundError = require('./errors/notFoundError');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -30,7 +30,7 @@ app.use(auth);
 app.use(routes);
 
 app.use(errors());
-app.use('*', (req, res) => res.status(NotFoundError).send({ message: 'Страница не существует' }));
+app.use('*', (req, res) => res.status(404).send({ message: 'Страница не существует' }));
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
