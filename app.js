@@ -30,7 +30,9 @@ app.use(auth);
 app.use(routes);
 
 app.use(errors());
-app.use('/*', () => { throw new NotFoundError('Страница не существует'); });
+
+// app.use('/', (req, res) => res.status(404).send({ message: 'Страница не существует' }));
+app.use('*', () => { throw new NotFoundError('Страница не существует'); });
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
