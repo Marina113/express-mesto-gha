@@ -11,7 +11,7 @@ const {
 
 const getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.send({ data: cards }))
+    .then((cards) => res.status(OK_CODE).send({ data: cards }))
     .catch(next);
 };
 
@@ -25,11 +25,11 @@ const delCardById = (req, res, next) => {
       if (cards.owner.toString() !== userId) {
         throw new ForbiddenError('Нельзя удалять чужую карточку!');
       }
-      Card.findByIdAndRemove(req.params._id).then(() => res.send({ data: cards }));
+      Card.findByIdAndRemove(req.params._id).then(() => res.status(OK_CODE).send({ data: cards }));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new CastError('Некорректный id'));
+        return next(new ValidationError('Некорректный id'));
       }
       return next(err);
     });
@@ -62,7 +62,7 @@ const putLikes = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new CastError('Некорректный id'));
+        next(new ValidationError('Некорректный id'));
       } else {
         next(err);
       }
@@ -81,7 +81,7 @@ const delLikes = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new CastError('Некорректный id'));
+        next(new ValidationError('Некорректный id'));
       } else {
         next(err);
       }

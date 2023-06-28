@@ -5,7 +5,6 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/notFoundError');
 const ValidationError = require('../errors/validationError');
 const ConflictError = require('../errors/conflictError');
-const CastError = require('../errors/castError');
 
 const {
   CREATED,
@@ -19,8 +18,8 @@ const getUsers = (req, res, next) => {
 };
 
 const getUserById = (req, res, next) => {
-  const userId = req.params._id;
-  User.findById(userId)
+  // const userId = req.params;
+  User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
@@ -29,7 +28,7 @@ const getUserById = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new CastError('Некорректный id'));
+        return next(new ValidationError('Некорректный id'));
       }
       return next(err);
     });

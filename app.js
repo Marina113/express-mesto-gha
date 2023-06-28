@@ -26,10 +26,6 @@ app.post('/signup', createUserValidation, createUser);
 // авторизация
 app.use(auth);
 
-// роуты, которым авторизация нужна
-// app.use('/cards', require('./routes/cards'));
-// app.use('/users', require('./routes/users'));
-
 app.use(routes);
 
 app.use(errors());
